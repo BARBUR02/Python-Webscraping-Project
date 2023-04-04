@@ -4,6 +4,7 @@ import time
 from dataclasses import dataclass
 import web_scraper.constants as const
 from abc import ABC, abstractmethod
+from selenium.webdriver.common.by import By
 
 """
     dataclass for storing offer objects
@@ -91,28 +92,30 @@ class E_KORKI(TutoringScraper):
 
     def scrape_pages(self, page_num):
         for _ in range(page_num):
-            offers_elements = self.find_elements_by_class_name(
-                'certificate_trow')
+            # offers_elements = self.find_elements_by_class_name('certificate_trow')
+            offers_elements = self.find_elements(By.CLASS_NAME,'certificate_trow')
             for offer_el in offers_elements:
                 self.offers.append(self.scrape_offer(offer_el))
             self.load_next_page()
 
     def scrape_offer(self, offer_element):
-        subject = offer_element.find_element_by_tag_name("strong").text.strip()
-        name = offer_element.find_element_by_class_name(
-            "offermainlisting_item-subject").text.strip()
-        price = offer_element.find_element_by_class_name("pr0").text
+        # subject = offer_element.find_element_by_tag_name("strong").text.strip()
+        subject = offer_element.find_element(By.TAG_NAME,"strong").text.strip()
+        # name = offer_element.find_element_by_class_name("offermainlisting_item-subject").text.strip()
+        name = offer_element.find_element(By.CLASS_NAME,"offermainlisting_item-subject").text.strip()
+        # price = offer_element.find_element_by_class_name("pr0").text
+        price = offer_element.find_element(By.CLASS_NAME,"pr0").text
         price = price.split()[0]
         price = int(price.strip().split(',')[0])
-        place = offer_element.find_element_by_class_name(
-            "offermainlisting_item-place").text.split(',')
+        # place = offer_element.find_element_by_class_name("offermainlisting_item-place").text.split(',')
+        place = offer_element.find_element(By.CLASS_NAME,"offermainlisting_item-place").text.split(',')
         place = place[1:] if place[0].lower() == 'online' else place[0].strip()
         if isinstance(place, list):
             place = ' '.join(place).strip()
-        description = offer_element.find_element_by_class_name(
-            "offermainlisting_item-desc").text.strip()
-        link = offer_element.find_element_by_class_name(
-            "offermainlisting_item-desc").find_element_by_tag_name('a').get_attribute("href").strip()
+        # description = offer_element.find_element_by_class_name("offermainlisting_item-desc").text.strip()
+        description = offer_element.find_element(By.CLASS_NAME,"offermainlisting_item-desc").text.strip()
+        # link = offer_element.find_element_by_class_name("offermainlisting_item-desc").find_element_by_tag_name('a').get_attribute("href").strip()
+        link = offer_element.find_element(By.CLASS_NAME,"offermainlisting_item-desc").find_element(By.TAG_NAME,'a').get_attribute("href").strip()
         return TutoringOffer(subject, name, price, place, description, link)
 
     def increment_page(self):
