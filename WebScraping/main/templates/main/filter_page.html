@@ -46,7 +46,8 @@ Filtrowanie ofert korepetycji
                         {% if offer.description %}
                             <p class="card-text"> {{ offer.description }} </p>
                         {% endif %}
-                        <a href="{{ offer.link }}" class="btn btn-primary">Sprawdź ogłoszenie</a>
+                        <a href="{{ offer.link}}" class="btn btn-primary">Sprawdź ogłoszenie</a>
+                        {% comment %} <p>URL is : {{offer.link|urlize}}</p> {% endcomment %}
                     </div>
         
                 </div>

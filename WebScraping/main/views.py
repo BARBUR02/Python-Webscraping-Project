@@ -1,12 +1,67 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic.list import ListView
+from django.contrib.auth import authenticate, login,logout
+from .forms import RegistrationForm, LoginForm
+from django.contrib.auth.decorators import login_required
 
 from main.models import Offert
 from main.filters import OfferFilter
 
+
+def registerUser(request):
+    user = request.user
+    if user.is_authenticated:
+        return redirect('filter-page')
+    context = {}
+    if request.POST:
+        print("RECEIVED POST!!")
+        form = RegistrationForm(request.POST)
+        print(f'FORM: {form}')
+        print(f'Form is valid: {form.is_valid()}')
+        if form.is_valid():
+            form.save()
+            email =  form.cleaned_data.get('email').lower()
+            raw_password = form.cleaned_data.get('password1').lower()
+            account = authenticate(email=email,password = raw_password)
+            login(request,account)
+            return  redirect('filter-page')
+        else:
+            context['registration_form'] = form 
+            print(f'CONTEXT: {context}')
+
+    return render(request, 'main/register.html', context=context)
+
+
+def loginUser(request, *args, **kwargs):
+    context = {}
+    user = request.user
+    if user.is_authenticated:
+        return redirect('filter-page')
+    if request.POST:
+        form = LoginForm(request.POST)
+        print(f"LOGIN, valid form: { form.is_valid()}, value: {form.cleaned_data}, form:{form} ")
+        if form.is_valid():
+            email = request.POST['email']
+            password = request.POST['password']
+            user = authenticate(email=email,password=password)
+            if user:
+                login(request, user)
+                return redirect('filter-page')
+        else:
+            context['login_form'] = form
+    # context['login_form'] = None
+    return render(request, 'main/login.html', context)
+
+
+def logoutUser(request):
+    logout(request)
+    return redirect('filter-page')
+
+
 def index(request):
-    return HttpResponseRedirect(redirect_to='offer-filter')
+    return redirect('filter-page')
+
 
 # def offer_filter(response):
 #     offers = Offert.objects.all()
@@ -39,3 +94,15 @@ class FilterView(ListView):
         for offer in queryset:
             if offer.locations:
                 offer.locations = offer.locations.split(", ") 
+
+
+
+# user specific views:
+
+@login_required(login_url="/login/")
+def add_offer(request):
+    return HttpResponse("<h1>Add offer only for authenticated</h1>")
+
+@login_required(login_url="/login/")
+def user_offer_list(request):
+    return HttpResponse("<h1>User specific offer list</h1>")
