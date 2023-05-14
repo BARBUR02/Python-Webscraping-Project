@@ -1,4 +1,7 @@
 import scrapy
+from scrapy.loader import ItemLoader
+from scraper.scraper.items import ScraperItem
+
 
 class EKorepetycjeSpider(scrapy.Spider):
     name = "e_korepetycje"
@@ -12,21 +15,23 @@ class EKorepetycjeSpider(scrapy.Spider):
     
     def parse(self, response):
         for offer in response.css('div.offer-content'):
-            yield {
-                'name': offer.css("div.offer-large-left h3 a::text").get(),
-                'subject': offer.css("span.subject::text").get(),
-                'locations': offer.css("span.offer-location::attr(data-original-title)").get(),
-                'cost': self.parse_cost(offer.css('span.cost')),
-                'description': offer.xpath('div[@class="offer-large-left"]/p/span[@itemprop="description"]/text()').get(),
-                'link': offer.css("div.offer-large-left h3 a::attr(href)").get(),
-            }
+            loader = ItemLoader(item=ScraperItem(), selector=offer)
+            loader.add_css('name', 'div.offer-large-left h3 a::text')
+            loader.add_css('subject', 'span.subject::text')
+            loader.add_css('locations', 'span.offer-location::attr(data-original-title)')
+            minPrice, maxPrice = self.parse_cost(offer.css('span.cost'))
+            loader.add_value('minPrice', minPrice)
+            loader.add_value('maxPrice', maxPrice)
+            loader.add_xpath('description', 'div[@class="offer-large-left"]/p/span[@itemprop="description"]/text()')
+            loader.add_css('link', 'div.offer-large-left h3 a::attr(href)')
+            yield loader.load_item()            
 
         if(self.depth):
             x = response.url
-            url = x if x.find('/page') == -1 else x[:x.find('/page')]
+            url = x if x.find('?p') == -1 else x[:x.find('?p')]
             self.counters[url] += 1
 
-            if self.counters[url] < 3:
+            if self.counters[url] < self.depth:
                 yield from response.follow_all(css='a.pagination-next', callback=self.parse)
             
             
@@ -42,5 +47,5 @@ class EKorepetycjeSpider(scrapy.Spider):
             maxPrice = priceContainer.xpath('span[@itemprop="maxPrice"]/text()').get() 
 
         #returning None if price is not specified (for instance to negotiate)
-        return (minPrice, maxPrice)
+        return minPrice, maxPrice
     

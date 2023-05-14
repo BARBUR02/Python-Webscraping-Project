@@ -1,0 +1,100 @@
+{% extends 'main/base.html' %}
+{% load filter_extras %}
+
+{% block title %}
+Filtrowanie ofert korepetycji
+{% endblock %}
+
+{% block content %}
+    <form method="get">
+        <div class="form-container">
+            {{ form }}
+        </div>
+        <button class="search-btn">Wyszukaj</button>
+    </form>
+
+    <div class="container">
+        <div class="row">
+        {% for offer in offers %}
+            <div class="col-12 mt-3">
+                <div class="card shadow"  style="max-width: 800px;">
+                    <div class="card-body ">
+                        <h5 class="card-title"> {{ offer.subject }} </h5>
+                        <h6 class="card-subtitle mb-2 text-body-secondary"> {{ offer.name }} </h6>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        {% if offer.minPrice == None %}
+                            <li class="list-group-item"> Cena do ustalenia </li>
+                        {% elif offer.minPrice != offer.maxPrice %} 
+                            <li class="list-group-item"> {{ offer.minPrice }} - {{ offer.maxPrice }} </li>
+                        {% else %}
+                            <li class="list-group-item"> {{ offer.minPrice }} </li>
+                        {% endif %}
+                        <li class="list-group-item"> 
+                            {% if offer.locations|length > 4 %}
+                            {% for location in offer.locations|slice:":4" %}
+                                    {{ location }}
+                                    {% if not forloop.last %},{% endif %}
+                                {% endfor %}
+                                i {{ offer.locations|length|add:"-4" }} więcej
+                            {% else %}
+                                {{ offer.locations|join:", " }}
+                            {% endif %}
+                        </li>
+                    </ul>
+                    <div class="card-body">
+                        {% if offer.description %}
+                            <p class="card-text"> {{ offer.description }} </p>
+                        {% endif %}
+                        <a href="{{ offer.link }}" class="btn btn-primary">Sprawdź ogłoszenie</a>
+                    </div>
+        
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    
+    {% if page_obj.has_previous %}
+        <a href="{% my_url page_obj.previous_page_number 'page' request.GET.urlencode %}" class="btn btn-outline-primary">
+            Previous Page
+        </a>
+    {% else %}
+        <button type="button" class="btn btn-outline-primary" disabled> Previous Page </button>
+    {% endif %}
+    
+    {% if page_obj.number|add:'-4' > 1 %}
+        <a href="{% my_url page_obj.number|add:'-5' 'page' request.GET.urlencode %}" class="btn btn-outline-primary">
+            &hellip;
+        </a>
+    {% endif %}
+
+    {% for page_number in paginator.page_range %} 
+            {% if page_obj.number == page_number %}
+                <button class="btn btn-outline-primary active">
+                    <span>{{ page_number }}</span>
+                </button>
+            {% elif page_number > page_obj.number|add:'-5' and page_number < page_obj.number|add:'5' %}
+                <a href="{% my_url page_number 'page' request.GET.urlencode %}" class="btn btn-outline-primary">
+                    {{ page_number }}
+                </a>
+            {% endif %}
+        {% endfor %}
+
+    {% if page_obj.number|add:'4' < paginator.num_pages %}
+        <a href="{% my_url page_obj.number|add:'5' 'page' request.GET.urlencode %}" class="btn btn-outline-primary">
+            &hellip;
+        </a>
+    {% endif %}
+
+    {% if page_obj.has_next %}
+        <a href="{% my_url page_obj.next_page_number 'page' request.GET.urlencode %}" class="btn btn-outline-primary">
+            Next Page
+        </a>    
+
+    {% else %}
+        <button type="button" class="btn btn-outline-primary" disabled> Next Page </button>
+    {% endif %}
+
+{% endblock %}
