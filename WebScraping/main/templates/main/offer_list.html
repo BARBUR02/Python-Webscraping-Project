@@ -16,7 +16,13 @@ Moje oferty
                 <h6 class="card-subtitle mb-2 text-body-secondary"> {{ offer.name }} </h6>
             </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item"> {{ offer.price }} PLN </li>
+                {% if offer.minPrice == None %}
+                    <li class="list-group-item"> Cena do ustalenia </li>
+                {% elif offer.minPrice != offer.maxPrice %} 
+                    <li class="list-group-item"> {{ offer.minPrice }} - {{ offer.maxPrice }} PLN </li>
+                {% else %}
+                    <li class="list-group-item"> {{ offer.minPrice }} PLN </li>
+                {% endif %}
                 <li class="list-group-item"> 
                     {% if offer.locations|length > 4 %}
                     {% for location in offer.locations|slice:":4" %}

@@ -29,6 +29,44 @@ Filtrowanie ofert korepetycji
         <div class="col-12 col-lg-8">
             <div class="container">
                 <div class="row">
+                {% for offer in our_offers %}
+                <div class="col-12 mt-3">
+                    <div class="card shadow"  style="max-width: 800px;">
+                        <div class="card-body ">
+                            <h5 class="card-title"> {{ offer.subject }} </h5>
+                            <h6 class="card-subtitle mb-2 text-body-secondary"> {{ offer.name }} </h6>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            {% if offer.minPrice == None %}
+                                <li class="list-group-item"> Cena do ustalenia </li>
+                            {% elif offer.minPrice != offer.maxPrice %} 
+                                <li class="list-group-item"> {{ offer.minPrice }} - {{ offer.maxPrice }} PLN </li>
+                            {% else %}
+                                <li class="list-group-item"> {{ offer.minPrice }} PLN </li>
+                            {% endif %}
+                            <li class="list-group-item"> 
+                                {% if offer.locations|length > 4 %}
+                                {% for location in offer.locations|slice:":4" %}
+                                        {{ location }}
+                                        {% if not forloop.last %},{% endif %}
+                                    {% endfor %}
+                                    i {{ offer.locations|length|add:"-4" }} więcej
+                                {% else %}
+                                    {{ offer.locations|join:", " }}
+                                {% endif %}
+                            </li>
+                        </ul>
+                        <div class="card-body">
+                            {% if offer.description %}
+                                <p class="card-text"> {{ offer.description }} </p>
+                            {% endif %}
+                            <a href="{{ offer.link }}" class="btn btn-primary">Sprawdź ogłoszenie</a>
+                            {% comment %} <p>URL is : {{offer.link|urlize}}</p> {% endcomment %}
+                        </div>
+            
+                    </div>
+                </div>
+                {% endfor %}
                 {% for offer in offers %}
                     <div class="col-12 mt-3">
                         <div class="card shadow"  style="max-width: 800px;">

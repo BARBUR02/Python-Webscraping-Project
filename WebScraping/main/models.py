@@ -85,7 +85,7 @@ class Offert(models.Model):
     def __str__(self):
         return f'[{self.subject}] {self.name}'
     
-class Announcement(models.Model):
+class Announcement(models.Model): #TODO żeby rozszerzał Offers?
     SUBJECTS = [
         ("Język polski", "Język polski"),
         ("Język angielski", "Język angielski"),

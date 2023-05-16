@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from main.models import Offert, Announcement
 from main.filters import OfferFilter
 
+from itertools import chain
 
 def registerUser(request):
     user = request.user
@@ -63,6 +64,7 @@ def index(request):
 
 class FilterView(ListView):
     queryset = Offert.objects.all()
+    quesryset2 = Announcement.objects.all() #TODO to do zmiany, na szybko robiłem
     context_object_name ='offers'
     template_name='main/filter_page.html'
     paginate_by=20
@@ -75,6 +77,7 @@ class FilterView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)    
         context['form'] = self.filterset.form
+        context['our_offers'] = Announcement.objects.all()
         self.__repair_locations(context['offers'])
         return context
     
