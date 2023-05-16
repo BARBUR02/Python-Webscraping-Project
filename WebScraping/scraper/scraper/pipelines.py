@@ -32,4 +32,6 @@ class TableErrorPipeline(object):
             item['description'] = item['description'][0]
         if item.get('locations'):
             item['locations'] = item['locations'][0]
+        if item.get('link'):
+            item['link'] = item['link'][0]
         return item

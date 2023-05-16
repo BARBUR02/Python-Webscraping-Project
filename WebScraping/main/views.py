@@ -2,10 +2,11 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic.list import ListView
 from django.contrib.auth import authenticate, login,logout
-from .forms import RegistrationForm, LoginForm
+
+from .forms import OfferForm, RegistrationForm, LoginForm
 from django.contrib.auth.decorators import login_required
 
-from main.models import Offert
+from main.models import Offert, Announcement
 from main.filters import OfferFilter
 
 
@@ -53,25 +54,12 @@ def loginUser(request, *args, **kwargs):
     # context['login_form'] = None
     return render(request, 'main/login.html', context)
 
-
 def logoutUser(request):
     logout(request)
     return redirect('filter-page')
 
-
 def index(request):
     return redirect('filter-page')
-
-
-# def offer_filter(response):
-#     offers = Offert.objects.all()
-#     for offer in offers:
-#         if offer.locations:
-#             offer.locations = offer.locations.split(", ") 
-#     filter_form = OfferFilter()
-#     context ={'offers' : offers, 
-#               'form': filter_form.form} 
-#     return render(response, "main/filter_page.html", context)
 
 class FilterView(ListView):
     queryset = Offert.objects.all()
@@ -98,11 +86,42 @@ class FilterView(ListView):
 
 
 # user specific views:
-
 @login_required(login_url="/login/")
 def add_offer(request):
-    return HttpResponse("<h1>Add offer only for authenticated</h1>")
+    user = request.user
+    context = {}
+    context['user'] = user
+    if not user.is_authenticated:
+        return redirect('filter-page')
+    if request.POST:
+        form = OfferForm(request.POST)
+        # print(f"LOGIN, valid form: { form.is_valid()}, value: {form.cleaned_data}")
+        if form.is_valid():
+            n = form.cleaned_data['name']
+            s = form.cleaned_data['subject']
+            l = form.cleaned_data['locations']
+            p = form.cleaned_data['price']
+            d = form.cleaned_data['description']
+            ph = form.cleaned_data['phone_number']
+            ai = user.id
+            a = Announcement(name=n, subject=s, locations=l, price=p,
+                             description=d, phone_number=ph, author_id=ai)
+            a.save()            
+        else:
+            context['offer_form'] = form
+    return render(request, 'main/offer_add.html', context)
+
 
 @login_required(login_url="/login/")
 def user_offer_list(request):
-    return HttpResponse("<h1>User specific offer list</h1>")
+    user = request.user
+    context = {}    
+    context["offers"] = Announcement.objects.filter(author_id=user.id)
+    for offer in context["offers"]:
+        if offer.locations:
+            offer.locations = offer.locations.split(", ") 
+    
+    if request.POST:
+        print(request.POST)
+
+    return render(request, 'main/offer_list.html', context=context)

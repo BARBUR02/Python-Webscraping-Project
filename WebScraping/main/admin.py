@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 # Register your models here.
-from .models import Offert,CustomUser
+from .models import Offert,CustomUser,Announcement
 
 class CustomUserAdmin(UserAdmin):
     list_display = ('id','email','username','first_name','last_name','phone_number','is_admin')
@@ -12,3 +12,4 @@ class CustomUserAdmin(UserAdmin):
 
 admin.site.register(CustomUser,CustomUserAdmin)
 admin.site.register(Offert)
+admin.site.register(Announcement)

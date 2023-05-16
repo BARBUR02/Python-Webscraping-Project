@@ -18,11 +18,18 @@ class EKorepetycjeSpider(scrapy.Spider):
             loader = ItemLoader(item=ScraperItem(), selector=offer)
             loader.add_css('name', 'div.offer-large-left h3 a::text')
             loader.add_css('subject', 'span.subject::text')
-            loader.add_css('locations', 'span.offer-location::attr(data-original-title)')
+            if(offer.css('span.offer-location::attr(data-original-title)').get() != None):
+                loader.add_css('locations', 'span.offer-location::attr(data-original-title)')
+            else: 
+                loader.add_css('locations', 'span.offer-location::text')
             minPrice, maxPrice = self.parse_cost(offer.css('span.cost'))
             loader.add_value('minPrice', minPrice)
             loader.add_value('maxPrice', maxPrice)
-            loader.add_xpath('description', 'div[@class="offer-large-left"]/p/span[@itemprop="description"]/text()')
+            if(offer.xpath('div[@class="offer-large-left"]/p/span[@itemprop="description"]/text()').get() != None):
+                loader.add_xpath('description', 'div[@class="offer-large-left"]/p/span[@itemprop="description"]/text()')
+            else:
+                loader.add_xpath('description', 'div[@class="offer-large-left"]/p/span/text()')
+
             loader.add_css('link', 'div.offer-large-left h3 a::attr(href)')
             yield loader.load_item()            
 

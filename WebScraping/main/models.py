@@ -28,7 +28,7 @@ class CustomUserManager(BaseUserManager):
             password=password)
         user.is_admin = True
         user.is_staff = True
-        user.is_superuser= True
+        user.is_superuser = True
         user.save(using = self._db)
         return user
 
@@ -39,7 +39,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=50)
-    date_joined = models.DateTimeField(verbose_name='date joined', auto_now=True)
+    date_joined = models.DateTimeField(verbose_name='date joined', auto_now=True) #auto_now_add?
     last_login = models.DateTimeField(verbose_name='last login', auto_now=True)
 
     is_admin = models.BooleanField(default=False)
@@ -66,7 +66,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return True
 
 class Offert(models.Model):
-    SUBJECTS =[
+    SUBJECTS = [
         ("Język polski", "Język polski"),
         ("Język angielski", "Język angielski"),
         ("Matematyka", "Matematyka"),
@@ -84,3 +84,24 @@ class Offert(models.Model):
 
     def __str__(self):
         return f'[{self.subject}] {self.name}'
+    
+class Announcement(models.Model):
+    SUBJECTS = [
+        ("Język polski", "Język polski"),
+        ("Język angielski", "Język angielski"),
+        ("Matematyka", "Matematyka"),
+        ("Fizyka", "Fizyka"),
+        ("Chemia", "Chemia"),
+    ]
+
+    name = models.CharField(max_length=255)
+    subject = models.CharField(max_length=255, choices=SUBJECTS)
+    locations = models.TextField(null=True)
+    price = models.IntegerField(null=True)
+    description = models.TextField(null=True)
+    phone_number = models.CharField(max_length=50)
+    author_id = models.IntegerField()
+    # image = models.ImageField() #TODO
+
+    def __str__(self):
+        return f'Author: {self.name} with id {self.author_id}, subject: {self.subject}'

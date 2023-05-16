@@ -24,7 +24,7 @@ class Command(BaseCommand):
 
     def __crawl_e_korepetycje(self, jl_file='', depth = 2):
         settings = my_settings
-        self.__crawl(E_KOREPETYCJE_URLS, EKorepetycjeSpider, settings, 20)
+        self.__crawl(E_KOREPETYCJE_URLS, EKorepetycjeSpider, settings, 5)
 
     def __delete_offerts(self):
         Offert.objects.all().delete()

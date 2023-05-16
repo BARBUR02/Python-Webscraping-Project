@@ -9,34 +9,22 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 </head>
+
 <body>
-    <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
-  <!-- Container wrapper -->
-  <div class="container">
-    
-    <!-- Collapsible wrapper -->
-    <div class="collapse navbar-collapse" id="navbarButtonsExample">
-      <!-- Left links -->
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'filter-page' %}">Filter Offers</a>
+  <nav class="navbar navbar-expand navbar-light bg-light mb-3">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'filter-page' %}">Filter Offers</a>
+      <ul class="navbar-nav">
+      {% if not user.is_authenticated %}
+        <li class="nav-item">  
+          <a href="{% url 'login' %}" class="btn btn-link px-3 me-2 text-decoration-none"> Login </a>        
         </li>
-      </ul>
-      <!-- Left links -->
-
-      <div class="d-flex align-items-center">
-       
-        {% if not user.is_authenticated %}
-          <a href="{% url 'login' %}" class="btn btn-link px-3 me-2 text-decoration-none"> Login </a>
-        
-      
+        <li class="nav-item">
           <a  class="btn btn-primary me-3 text-decoration-none" href="{% url 'register' %}"> Sign Up </a>
-
-        {% else %}
-          <ul class="navbar-nav">
+        </li>
+      {% else %}
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="nav-link dropdown-toggle px-3 me-2" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Manage
           </a>
           <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
@@ -44,17 +32,13 @@
             <li><a class="dropdown-item" href="{% url 'user-offer-list' %}">Your Offers</a></li>
           </ul>
         </li>
+        <li class="nav-item">
+          <a class="btn btn-primary px-3 me-2 text-decoration-none" href="{% url 'logout' %}"> Sign out </a>
+        </li>
       </ul>
-          <a  class="btn btn-primary me-3 text-decoration-none" href="{% url 'logout' %}"> Sign out </a>
-        {% endif %}
-      </div>
+      {% endif %}
     </div>
-    <!-- Collapsible wrapper -->
-  </div>
-  <!-- Container wrapper -->
-</nav>
-<!-- Navbar -->
-
+  </nav>
 
     {% block content %}
         <p>Base template</p>

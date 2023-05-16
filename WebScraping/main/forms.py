@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate
-from .models import CustomUser
+from .models import Announcement, CustomUser
 
 
 # Create your forms here.
@@ -47,7 +47,7 @@ class LoginForm(forms.ModelForm):
 				raise forms.ValidationError("Invalid Login or password")
 				
 
-
-
-   
-    
+class OfferForm(forms.ModelForm):
+	class Meta: 
+		model = Announcement
+		fields = ('name', 'subject', 'locations', 'price', 'description', 'phone_number')

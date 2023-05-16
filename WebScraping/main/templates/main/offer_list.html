@@ -1,0 +1,47 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+Moje oferty
+{% endblock %}
+
+{% block content %}
+<div class="container">
+<h1>Twoje oferty: </h1>  
+<div class="row">
+    {% for offer in offers %}
+    <div class="col-12 mt-3">
+        <div class="card shadow"  style="max-width: 800px;">
+            <div class="card-body ">
+                <h5 class="card-title"> {{ offer.subject }} </h5>
+                <h6 class="card-subtitle mb-2 text-body-secondary"> {{ offer.name }} </h6>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"> {{ offer.price }} PLN </li>
+                <li class="list-group-item"> 
+                    {% if offer.locations|length > 4 %}
+                    {% for location in offer.locations|slice:":4" %}
+                            {{ location }}
+                            {% if not forloop.last %},{% endif %}
+                        {% endfor %}
+                        i {{ offer.locations|length|add:"-4" }} więcej
+                    {% else %}
+                        {{ offer.locations|join:", " }}
+                    {% endif %}
+                </li>
+            </ul>
+            <div class="card-body">
+                {% if offer.description %}
+                    <p class="card-text"> {{ offer.description }} </p>
+                {% endif %}
+
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" value="{{offer.id}}" class="btn btn-danger">Usuń ogłoszenie</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
