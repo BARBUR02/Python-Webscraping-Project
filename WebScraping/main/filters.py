@@ -15,7 +15,6 @@ class OfferFilter(django_filters.FilterSet):
         label="Przedmiot",
         )
     minPrice = django_filters.RangeFilter(
-        
         label="Cena"
         )
     locations = django_filters.CharFilter(

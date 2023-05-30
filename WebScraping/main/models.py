@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 
+from model_utils.managers import InheritanceManager
+
 # first_name, last_name, phone_number, password=None kwargs ... mozna by bylo kwargsami niby
 class CustomUserManager(BaseUserManager):
     def create_user(self,email,username, password=None, **extra_fields):
@@ -66,6 +68,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return True
 
 class Offert(models.Model):
+    objects = InheritanceManager()
     SUBJECTS = [
         ("Język polski", "Język polski"),
         ("Język angielski", "Język angielski"),
@@ -81,24 +84,15 @@ class Offert(models.Model):
     maxPrice = models.IntegerField(null=True)
     description = models.TextField(null=True)
     link = models.URLField(max_length=255)
+    from_our_user = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ('-from_our_user', )
 
     def __str__(self):
         return f'[{self.subject}] {self.name}'
     
-class Announcement(models.Model): #TODO żeby rozszerzał Offers?
-    SUBJECTS = [
-        ("Język polski", "Język polski"),
-        ("Język angielski", "Język angielski"),
-        ("Matematyka", "Matematyka"),
-        ("Fizyka", "Fizyka"),
-        ("Chemia", "Chemia"),
-    ]
-
-    name = models.CharField(max_length=255)
-    subject = models.CharField(max_length=255, choices=SUBJECTS)
-    locations = models.TextField(null=True)
-    price = models.IntegerField(null=True)
-    description = models.TextField(null=True)
+class Announcement(Offert): 
     phone_number = models.CharField(max_length=50)
     author_id = models.IntegerField()
     # image = models.ImageField() #TODO

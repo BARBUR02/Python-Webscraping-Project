@@ -27,4 +27,4 @@ class Command(BaseCommand):
         self.__crawl(E_KOREPETYCJE_URLS, EKorepetycjeSpider, settings, 5)
 
     def __delete_offerts(self):
-        Offert.objects.all().delete()
+        Offert.objects.filter(from_our_user=False).delete()

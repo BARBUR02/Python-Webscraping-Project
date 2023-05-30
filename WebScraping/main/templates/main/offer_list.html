@@ -42,7 +42,7 @@ Moje oferty
 
                 <form method="post">
                     {% csrf_token %}
-                    <button type="submit" value="{{offer.id}}" class="btn btn-danger">Usuń ogłoszenie</button>
+                    <button type="submit" name='delete' value="{{offer.id}}" class="btn btn-danger">Usuń ogłoszenie</button>
                 </form>
             </div>
 

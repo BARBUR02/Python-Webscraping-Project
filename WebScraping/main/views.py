@@ -11,6 +11,11 @@ from main.filters import OfferFilter
 
 from itertools import chain
 
+def repair_locations(queryset):
+        for offer in queryset:
+            if offer.locations:
+                offer.locations = offer.locations.split(", ") 
+
 def registerUser(request):
     user = request.user
     if user.is_authenticated:
@@ -64,7 +69,6 @@ def index(request):
 
 class FilterView(ListView):
     queryset = Offert.objects.all()
-    quesryset2 = Announcement.objects.all() #TODO to do zmiany, na szybko robiłem
     context_object_name ='offers'
     template_name='main/filter_page.html'
     paginate_by=20
@@ -77,14 +81,8 @@ class FilterView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)    
         context['form'] = self.filterset.form
-        context['our_offers'] = Announcement.objects.all()
-        self.__repair_locations(context['offers'])
+        repair_locations(context['offers'])
         return context
-    
-    def __repair_locations(self, queryset):
-        for offer in queryset:
-            if offer.locations:
-                offer.locations = offer.locations.split(", ") 
 
 
 
@@ -100,15 +98,8 @@ def add_offer(request):
         form = OfferForm(request.POST)
         # print(f"LOGIN, valid form: { form.is_valid()}, value: {form.cleaned_data}")
         if form.is_valid():
-            n = form.cleaned_data['name']
-            s = form.cleaned_data['subject']
-            l = form.cleaned_data['locations']
-            p = form.cleaned_data['price']
-            d = form.cleaned_data['description']
-            ph = form.cleaned_data['phone_number']
             ai = user.id
-            a = Announcement(name=n, subject=s, locations=l, price=p,
-                             description=d, phone_number=ph, author_id=ai)
+            a = Announcement(**form.cleaned_data, maxPrice=form.cleaned_data['minPrice'], author_id=ai, from_our_user=True)
             a.save()            
         else:
             context['offer_form'] = form
@@ -120,11 +111,11 @@ def user_offer_list(request):
     user = request.user
     context = {}    
     context["offers"] = Announcement.objects.filter(author_id=user.id)
-    for offer in context["offers"]:
-        if offer.locations:
-            offer.locations = offer.locations.split(", ") 
+    repair_locations(context['offers'])
     
     if request.POST:
-        print(request.POST)
-
+        Announcement.objects.get(id=request.POST.get('delete')).delete()
+        context["offers"] = Announcement.objects.filter(author_id=user.id)
+        repair_locations(context['offers'])
+        return render(request, 'main/offer_list.html', context=context)
     return render(request, 'main/offer_list.html', context=context)
