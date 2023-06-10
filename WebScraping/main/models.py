@@ -4,8 +4,10 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, Permis
 from model_utils.managers import InheritanceManager
 
 # first_name, last_name, phone_number, password=None kwargs ... mozna by bylo kwargsami niby
+
+
 class CustomUserManager(BaseUserManager):
-    def create_user(self,email,username, password=None, **extra_fields):
+    def create_user(self, email, username, password=None, **extra_fields):
         if not email:
             raise ValueError("Users must have an email address")
         if not username:
@@ -20,10 +22,10 @@ class CustomUserManager(BaseUserManager):
             **extra_fields
         )
         user.set_password(password)
-        user.save(using = self._db)
+        user.save(using=self._db)
         return user
-    
-    def create_superuser(self,email,username, password=None,  **extra_fields):
+
+    def create_superuser(self, email, username, password=None,  **extra_fields):
         user = self.create_user(
             email=email,
             username=username,
@@ -31,17 +33,18 @@ class CustomUserManager(BaseUserManager):
         user.is_admin = True
         user.is_staff = True
         user.is_superuser = True
-        user.save(using = self._db)
+        user.save(using=self._db)
         return user
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(db_index=True,unique=True, max_length=255)
-    username = models.CharField(max_length=255, unique = True)
+    email = models.EmailField(db_index=True, unique=True, max_length=255)
+    username = models.CharField(max_length=255, unique=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=50)
-    date_joined = models.DateTimeField(verbose_name='date joined', auto_now=True) #auto_now_add?
+    date_joined = models.DateTimeField(
+        verbose_name='date joined', auto_now=True)  # auto_now_add?
     last_login = models.DateTimeField(verbose_name='last login', auto_now=True)
 
     is_admin = models.BooleanField(default=False)
@@ -61,11 +64,12 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.username
 
-    def has_perm(self,perm, obj=None):
+    def has_perm(self, perm, obj=None):
         return self.is_admin
 
-    def has_module_perms(self,app_label):
+    def has_module_perms(self, app_label):
         return True
+
 
 class Offert(models.Model):
     objects = InheritanceManager()
@@ -77,6 +81,13 @@ class Offert(models.Model):
         ("Chemia", "Chemia"),
     ]
 
+    ORIGINS = [
+        ("E_KORKI", "E_KORKI"),
+        ("E_KOREPETYCJE", "E_KOREPETYCJE"),
+        ("KOREPETYCJE", "KOREPETYCJE"),
+        ("LOCAL", "LOCAL")
+    ]
+
     name = models.CharField(max_length=255)
     subject = models.CharField(max_length=255, choices=SUBJECTS)
     locations = models.TextField(null=True)
@@ -85,14 +96,16 @@ class Offert(models.Model):
     description = models.TextField(null=True)
     link = models.URLField(max_length=255)
     from_our_user = models.BooleanField(default=False)
+    origin = models.CharField(max_length=255, choices=ORIGINS, default="LOCAL")
 
     class Meta:
         ordering = ('-from_our_user', )
 
     def __str__(self):
         return f'[{self.subject}] {self.name}'
-    
-class Announcement(Offert): 
+
+
+class Announcement(Offert):
     phone_number = models.CharField(max_length=50)
     author_id = models.IntegerField()
     # image = models.ImageField() #TODO

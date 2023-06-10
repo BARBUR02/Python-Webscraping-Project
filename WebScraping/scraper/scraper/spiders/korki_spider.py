@@ -31,6 +31,7 @@ class EKorepetycjeSpider(scrapy.Spider):
                 loader.add_xpath('description', 'div[@class="offer-large-left"]/p/span/text()')
 
             loader.add_css('link', 'div.offer-large-left h3 a::attr(href)')
+            loader.add_value('origin', "E_KOREPETYCJE")
             yield loader.load_item()            
 
         if(self.depth):
