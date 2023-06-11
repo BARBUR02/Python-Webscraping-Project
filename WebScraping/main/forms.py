@@ -50,4 +50,4 @@ class LoginForm(forms.ModelForm):
 class OfferForm(forms.ModelForm):
 	class Meta: 
 		model = Announcement
-		fields = ('name', 'subject', 'locations', 'minPrice', 'description', 'phone_number')
+		fields = ('name', 'subject', 'locations', 'minPrice', 'description', 'phone_number','image')

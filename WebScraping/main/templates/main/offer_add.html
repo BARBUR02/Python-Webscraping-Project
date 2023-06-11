@@ -5,11 +5,15 @@ Moje oferty
 {% endblock %}
 
 {% block content %}
-<form method="post" class="p-3 m-4 border border-3 border-success border-opacity-75 rounded">
+<form method="post" enctype="multipart/form-data" class="p-3 m-4 border border-3 border-success border-opacity-75 rounded">
     {% csrf_token %}
     <div class="form-outline mb-2">
         <label class="form-label" for="name">Twoja nazwa</label>
         <input type="text" id="name" name="name" class="form-control form-control-lg"value="{{user.username}}" required/>
+    </div>
+    <div class="form-outline mb-2">
+        <label class="form-label" for="image">Zdjęcie dla ofery</label>
+        <input type="file" id="image" name="image" class="form-control form-control-lg" accept="image/*" required/>
     </div>
     <div class="form-outline mb-2">
         <label class="form-label" for="subject">Przedmiot</label>

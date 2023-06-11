@@ -1,0 +1,62 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+Moje oferty
+{% endblock %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data" class="p-3 m-4 border border-3 border-success border-opacity-75 rounded">
+    {% csrf_token %}
+    <div class="form-outline mb-2">
+        <label class="form-label" for="name">Twoja nazwa</label>
+        <input type="text" id="name" name="name" class="form-control form-control-lg" value="{{offer.name}}" required/>
+    </div>
+    <div class="form-outline mb-2">
+        <label class="form-label" for="subject">Przedmiot</label>
+        <select class="form-select" id="subject" name="subject" aria-label="Subject select" value="{{ offer.subject }}" required/>
+            <option value="Język polski">Język polski</option>
+            <option value="Język angielski">Język angielski</option>
+            <option value="Matematyka">Matematyka</option>
+            <option value="Fizyka">Fizyka</option>
+            <option value="Chemia">Chemia</option>
+          </select>
+    </div>
+    <div class="form-outline mb-2">
+        <label class="form-label" for="locations"  >Lokalizacja</label>
+        <input type="textarea" id="locations" value="{{offer.locations}}" name="locations" class="form-control form-control-lg" required/>
+    </div>
+    <div class="form-outline mb-2">
+        <label class="form-label" for="minPrice">Cena za godzinę</label>
+        <input type="number" value={{offer.minPrice}} id="minPrice" name="minPrice" class="form-control form-control-lg" required/>
+    </div>
+    <div class="form-outline mb-2">
+        <label class="form-label" for="description">Opis</label>
+        <input type="textarea" style="height: 200px" name="description" id="description" value="{{offer.description}}" class="form-control"/>
+    </div>
+    <div class="form-outline mb-2">
+        <label class="form-label" for="phone_number">Numer telefonu w ogłoszeniu</label>
+        <input type="text" value="{{ offer.phone_number }}" id="phone_number" name="phone_number" class="form-control form-control-lg" value="{{user.phone_number}}" required/>
+    </div>
+
+    {% for field in offer_form %}
+    {% for error in  field.errors %}
+        <div class="error text-danger">
+        {{error}}
+    </div>
+    {% endfor %}
+    {% endfor %}
+    {% if offer_form.non_field_errors %}
+        <div class="error text-danger">
+        {{offer_form.non_field_errors}}
+        </div>
+    {% endif %}
+
+
+
+    <div class="d-flex justify-content-center">
+        <button type="submit"
+        class="btn btn-success btn-block btn-lg gradient-custom-4 text-white mt-3">Edytuj ogłoszenie</button>
+    </div>
+
+</form>
+{% endblock %}

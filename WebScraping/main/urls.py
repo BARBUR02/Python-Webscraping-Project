@@ -8,6 +8,7 @@ urlpatterns = [
     path('logout/' ,views.logoutUser, name='logout'),
     path("offer-filter", views.FilterView.as_view(), name="filter-page"),
     path("add-offer", views.add_offer, name="user-add-offer"),
+    path("my-offers/int:<offerId>", views.user_offer_edit, name="user-offer-edit"),
     path("my-offers", views.user_offer_list, name="user-offer-list"),
     path("", views.index, name="index"),
 ]

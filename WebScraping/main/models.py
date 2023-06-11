@@ -109,6 +109,7 @@ class Announcement(Offert):
     phone_number = models.CharField(max_length=50)
     author_id = models.IntegerField()
     # image = models.ImageField() #TODO
+    image = models.ImageField(upload_to="images")
 
     def __str__(self):
         return f'Author: {self.name} with id {self.author_id}, subject: {self.subject}'

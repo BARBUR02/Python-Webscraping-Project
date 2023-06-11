@@ -95,12 +95,13 @@ def add_offer(request):
     if not user.is_authenticated:
         return redirect('filter-page')
     if request.POST:
-        form = OfferForm(request.POST)
-        # print(f"LOGIN, valid form: { form.is_valid()}, value: {form.cleaned_data}")
+        form = OfferForm(request.POST, request.FILES)
+        # print(f"Valid form: { form.is_valid()}, value: {form.cleaned_data}")
         if form.is_valid():
             ai = user.id
             a = Announcement(**form.cleaned_data, maxPrice=form.cleaned_data['minPrice'], author_id=ai, from_our_user=True)
-            a.save()            
+            a.save() 
+            return redirect('user-offer-list')           
         else:
             context['offer_form'] = form
     return render(request, 'main/offer_add.html', context)
@@ -119,3 +120,25 @@ def user_offer_list(request):
         repair_locations(context['offers'])
         return render(request, 'main/offer_list.html', context=context)
     return render(request, 'main/offer_list.html', context=context)
+
+
+@login_required(login_url="/login/")
+def user_offer_edit(request, offerId):
+    announcement = Announcement.objects.filter(id=offerId).first()
+    if not announcement: 
+        return HttpResponse("Given id does not exist")
+    if not announcement.author_id == request.user.id:
+        return HttpResponse("No permissions to this offer")
+
+    if request.POST:
+        form = OfferForm(request.POST)
+        print(form.is_valid())
+        print(form.cleaned_data)
+        data = form.cleaned_data
+        # announcement.update(**data)
+        Announcement.objects.filter(id=offerId).update(**data, maxPrice=data["minPrice"])
+        return redirect('user-offer-list')
+    context = {
+        "offer": announcement
+    }
+    return render(request, 'main/offer_edit.html', context=context)

@@ -14,6 +14,11 @@ Moje oferty
             <div class="card-body ">
                 <h5 class="card-title"> {{ offer.subject }} </h5>
                 <h6 class="card-subtitle mb-2 text-body-secondary"> {{ offer.name }} </h6>
+                <img
+                  src="{{ offer.image.url }}"
+                  class="img-fluid"
+                  alt="OUR LOGO"
+                />
             </div>
             <ul class="list-group list-group-flush">
                 {% if offer.minPrice == None %}
@@ -44,6 +49,11 @@ Moje oferty
                     {% csrf_token %}
                     <button type="submit" name='delete' value="{{offer.id}}" class="btn btn-danger">Usuń ogłoszenie</button>
                 </form>
+            </div>
+            <div class="card-body">
+                <a href="{% url 'user-offer-edit' offerId=offer.id %}">
+            <button type="button" name='edit' value="{{offer.id}}" class="btn btn-info">Edytuj ogłoszenie</button>
+               </a>
             </div>
 
         </div>
