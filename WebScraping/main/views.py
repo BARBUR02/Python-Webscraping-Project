@@ -15,6 +15,16 @@ def repair_locations(queryset):
             if offer.locations:
                 offer.locations = offer.locations.split(", ") 
 
+# def calculate_range(queryset):
+#     min = 10000 
+#     max = 0
+#     for offer in queryset:
+#         if offer.minPrice < min:
+#             min = offer.minPrice
+#         if offer.minPrice > max:
+#             max = offer.minPrice
+#     return min, max
+
 def registerUser(request):
     user = request.user
     if user.is_authenticated:
@@ -71,18 +81,24 @@ class FilterView(ListView):
     context_object_name ='offers'
     template_name='main/filter_page.html'
     paginate_by=20
-            
+
     def get_queryset(self):
-        queryset = super().get_queryset()   
+        queryset = super().get_queryset()  
         self.filterset = OfferFilter(self.request.GET, queryset=queryset)
+        if 'test' in self.request.GET:
+            print("IN")
+        else: 
+            print("OUT")
         return self.filterset.qs
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)    
         context['form'] = self.filterset.form
         repair_locations(context['offers'])
+        # minRange, maxRange = calculate_range(context['offers']) #liczy tylko dla strony, którą aktualnie wyświetla
+        # context['minRange'] = minRange
+        # context['maxRange'] = maxRange 
         return context
-
 
 
 # user specific views:

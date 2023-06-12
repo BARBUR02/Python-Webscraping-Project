@@ -25,6 +25,7 @@ class OfferFilter(django_filters.FilterSet):
         lookup_expr='icontains',
         label="Nazwa"
         )
+
     class Meta:
         model = Offert
         fields = ['subject', 'minPrice', 'locations', 'name']
