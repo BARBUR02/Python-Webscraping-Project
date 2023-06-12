@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login,logout
 from .forms import OfferForm, RegistrationForm, LoginForm
 from django.contrib.auth.decorators import login_required
 
-from main.models import Offert, Announcement
+from main.models import Offert, Announcement, CustomUser
 from main.filters import OfferFilter
 
 from itertools import chain
@@ -99,7 +99,7 @@ def add_offer(request):
         # print(f"Valid form: { form.is_valid()}, value: {form.cleaned_data}")
         if form.is_valid():
             ai = user.id
-            a = Announcement(**form.cleaned_data, maxPrice=form.cleaned_data['minPrice'], author_id=ai, from_our_user=True)
+            a = Announcement(**form.cleaned_data, maxPrice=form.cleaned_data['minPrice'], author_id=ai)
             a.save() 
             return redirect('user-offer-list')           
         else:
@@ -142,3 +142,26 @@ def user_offer_edit(request, offerId):
         "offer": announcement
     }
     return render(request, 'main/offer_edit.html', context=context)
+
+def offer(request, offerId):
+    announcement = Announcement.objects.filter(id=offerId).first()
+    user = CustomUser.objects.filter(id=announcement.author_id).first()
+    number_hidden = True
+    if not announcement: 
+        return HttpResponse("Nie ma takiej oferty")
+    
+    announcement.offer_check += 1
+    announcement.save()
+    
+    if request.method == 'POST':
+        number_hidden = False
+        announcement.phone_check += 1
+        announcement.save()
+
+    context = {
+        "offer": announcement,
+        "user": user,
+        "number_hidden": number_hidden
+    }
+
+    return render(request, 'main/offer.html', context=context)

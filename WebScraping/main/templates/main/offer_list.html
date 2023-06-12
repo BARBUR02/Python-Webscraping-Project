@@ -12,11 +12,33 @@ Moje oferty
     <div class="col-12 mt-3">
         <div class="card shadow"  style="max-width: 800px;">
             <div class="card-body ">
-                <h5 class="card-title"> {{ offer.subject }} </h5>
-                <h6 class="card-subtitle mb-2 text-body-secondary"> {{ offer.name }} </h6>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-6 ps-0">
+                            <h5 class="card-title"> {{ offer.subject }} </h5>
+                            <h6 class="card-subtitle mb-2 text-body-secondary"> {{ offer.name }} </h6>
+                        </div>
+                        <div class="col-6">
+                            <div class="d-flex flex-column float-end me-5 text-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1.5rem" height="1.5rem" fill="currentColor" class="bi bi-telephone-fill" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/>
+                                </svg>
+                                <div> {{ offer.phone_check }} </div>
+                            </div>                            
+                            <div class="d-flex flex-column float-end me-5 text-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1.5rem" height="1.5rem" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                    <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                                    <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+                                </svg>
+                                <div> {{ offer.offer_check }} </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <img
                   src="{{ offer.image.url }}"
                   class="img-fluid"
+                  style="height: 10rem"
                   alt="OUR LOGO"
                 />
             </div>
@@ -42,20 +64,22 @@ Moje oferty
             </ul>
             <div class="card-body">
                 {% if offer.description %}
-                    <p class="card-text"> {{ offer.description }} </p>
+                    <p class="card-text"> {{ offer.description|truncatewords:20 }} </p>
                 {% endif %}
 
+            </div>
+            <div class="d-flex justify-content-evenly my-2">
+                <a href="{% url 'offer' offerId=offer.id %}" type="button" name='edit' class="btn btn-info">
+                    Sprawdź ogłoszenie
+               </a>
+                <a href="{% url 'user-offer-edit' offerId=offer.id %}" type="button" name='edit' class="btn btn-warning">
+                    Edytuj ogłoszenie
+               </a>
                 <form method="post">
                     {% csrf_token %}
                     <button type="submit" name='delete' value="{{offer.id}}" class="btn btn-danger">Usuń ogłoszenie</button>
                 </form>
             </div>
-            <div class="card-body">
-                <a href="{% url 'user-offer-edit' offerId=offer.id %}">
-            <button type="button" name='edit' value="{{offer.id}}" class="btn btn-info">Edytuj ogłoszenie</button>
-               </a>
-            </div>
-
         </div>
     </div>
     {% endfor %}

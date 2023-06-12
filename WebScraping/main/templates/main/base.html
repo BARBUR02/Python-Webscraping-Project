@@ -14,12 +14,14 @@
 <body>
   <nav class="navbar navbar-expand navbar-light bg-light mb-3">
     <div class="container-fluid">
-      <img
-        src="{% static 'main/our_logo.png' %}"
-        style="height: 70px;width:120px"
-        {% comment %} class="img-fluid" {% endcomment %}
-        alt="OUR LOGO"
-      />
+      <a class="navbar-brand" href="{% url 'filter-page' %}">
+        <img
+          src="{% static 'main/our_logo.png' %}"
+          style="height: 70px;width:120px"
+          class="img-fluid"
+          alt="our logo"
+        />
+      </a>
       <a class="navbar-brand" style="margin-left:40px" href="{% url 'filter-page' %}">Filter Offers</a>
       <ul class="navbar-nav">
       {% if not user.is_authenticated %}
