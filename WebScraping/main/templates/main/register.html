@@ -10,43 +10,43 @@
         <div class="col-12 col-md-9 col-lg-7 col-xl-6">
           <div class="card" style="border-radius: 15px;">
             <div class="card-body p-5">
-              <h2 class="text-uppercase text-center mb-5">Create an account</h2>
+              <h2 class="text-uppercase text-center mb-5">Załóz konto</h2>
 
               <form method="post">
                 {% csrf_token %}
                 <div class="form-outline mb-2">
                   <input type="text" id="form3Example1cg" name="username" class="form-control form-control-lg"  required/>
-                  <label class="form-label" for="form3Example1cg" >Your Username</label>
+                  <label class="form-label" for="form3Example1cg" >Nazwa użytkownika</label>
                 </div>
                 
                 <div class="form-outline mb-2">
                   <input type="text" name="first_name" id="form3Example4cdg" class="form-control form-control-lg" required/>
-                  <label class="form-label" for="form3Example4cdg">Your First Name</label>
+                  <label class="form-label" for="form3Example4cdg">Imię</label>
                 </div>
 
                 <div class="form-outline mb-2">
                   <input type="text" name="last_name" id="form3Example4cdg" class="form-control form-control-lg" required/>
-                  <label class="form-label" for="form3Example4cdg" >Your Last Name</label>
+                  <label class="form-label" for="form3Example4cdg" >Nazwisko</label>
                 </div>
 
                 <div class="form-outline mb-2">
                   <input type="email" name="email" id="form3Example3cg" class="form-control form-control-lg" required/>
-                  <label class="form-label" for="form3Example3cg">Your Email</label>
+                  <label class="form-label" for="form3Example3cg">Email</label>
                 </div>
 
                 <div class="form-outline mb-2">
                   <input type="text" name="phone_number" id="form3Example3cg" class="form-control form-control-lg" /required>
-                  <label class="form-label" for="form3Example3cg">Your Phone Number</label>
+                  <label class="form-label" for="form3Example3cg">Numer telefonu</label>
                 </div>
 
                 <div class="form-outline mb-2">
                   <input type="password"  name="password1" id="form3Example4cg" class="form-control form-control-lg" required/>
-                  <label class="form-label" for="form3Example4cg">Password</label>
+                  <label class="form-label" for="form3Example4cg">Hasło</label>
                 </div>
 
                 <div class="form-outline mb-2">
                   <input type="password" name="password2" id="form3Example4cdg" class="form-control form-control-lg" required/>
-                  <label class="form-label" for="form3Example4cdg">Repeat your password</label>
+                  <label class="form-label" for="form3Example4cdg">Powtórz hasło</label>
                 </div>
                 {% for field in registration_form %}
                   {% for error in  field.errors %}
@@ -64,12 +64,12 @@
                 
                 <div class="d-flex justify-content-center">
                   <button type="submit"
-                    class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Register</button>
+                    class="btn btn-success btn-block btn-lg gradient-custom-4">Zarejestruj</button>
                 </div>
 
 
-                <p class="text-center text-muted mt-5 mb-0">Have already an account? <a href="{% url 'login' %}"
-                    class="fw-bold text-body"><u>Login here</u></a></p>
+                <p class="text-center text-muted mt-5 mb-0">Masz już konto? <a href="{% url 'login' %}"
+                    class="fw-bold text-body"><u>Zaloguj się</u></a></p>
 
               </form>
 

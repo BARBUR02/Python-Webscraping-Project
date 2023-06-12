@@ -10,17 +10,17 @@
         <div class="col-12 col-md-9 col-lg-7 col-xl-6">
           <div class="card" style="border-radius: 15px;">
             <div class="card-body p-5">
-              <h2 class="text-uppercase text-center mb-5">Login into account</h2>
+              <h2 class="text-uppercase text-center mb-5">Zaloguj się</h2>
 
               <form method="post">
                 {% csrf_token %}
                 <div class="form-outline mb-2">
                   <input type="email" id="form3Example1cg" name="email" class="form-control form-control-lg"  required/>
-                  <label class="form-label" for="form3Example1cg" >Your Email</label>
+                  <label class="form-label" for="form3Example1cg" >Email</label>
                 </div>
                 <div class="form-outline mb-2">
                   <input type="password"  name="password" id="form3Example4cg" class="form-control form-control-lg" required/>
-                  <label class="form-label" for="form3Example4cg">Password</label>
+                  <label class="form-label" for="form3Example4cg">Hasło</label>
                 </div>
 
                 
@@ -41,11 +41,11 @@
                 
                 <div class="d-flex justify-content-center">
                   <button type="submit"
-                    class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Login</button>
+                    class="btn btn-success btn-block btn-lg gradient-custom-4">Zaloguj</button>
                 </div>
 
-                <p class="text-center text-muted mt-5 mb-0">You don't have account <a href="{% url 'register' %}"
-                    class="fw-bold text-body"><u>Register here</u></a></p>
+                <p class="text-center text-muted mt-5 mb-0">Nie masz konta? <a href="{% url 'register' %}"
+                    class="fw-bold text-body"><u>Zarejestruj się</u></a></p>
               </form>
 
             </div>

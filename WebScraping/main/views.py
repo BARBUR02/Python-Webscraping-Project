@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.views.generic.list import ListView
 from django.contrib.auth import authenticate, login,logout
 
@@ -9,7 +9,6 @@ from django.contrib.auth.decorators import login_required
 from main.models import Offert, Announcement, CustomUser
 from main.filters import OfferFilter
 
-from itertools import chain
 
 def repair_locations(queryset):
         for offer in queryset:
@@ -22,10 +21,10 @@ def registerUser(request):
         return redirect('filter-page')
     context = {}
     if request.POST:
-        print("RECEIVED POST!!")
+        # print("RECEIVED POST!!")
         form = RegistrationForm(request.POST)
-        print(f'FORM: {form}')
-        print(f'Form is valid: {form.is_valid()}')
+        # print(f'FORM: {form}')
+        # print(f'Form is valid: {form.is_valid()}')
         if form.is_valid():
             form.save()
             email =  form.cleaned_data.get('email').lower()
@@ -47,7 +46,7 @@ def loginUser(request, *args, **kwargs):
         return redirect('filter-page')
     if request.POST:
         form = LoginForm(request.POST)
-        print(f"LOGIN, valid form: { form.is_valid()}, value: {form.cleaned_data}, form:{form} ")
+        # print(f"LOGIN, valid form: { form.is_valid()}, value: {form.cleaned_data}, form:{form} ")
         if form.is_valid():
             email = request.POST['email']
             password = request.POST['password']
@@ -156,6 +155,7 @@ def offer(request, offerId):
     if request.method == 'POST':
         number_hidden = False
         announcement.phone_check += 1
+        announcement.offer_check -= 1
         announcement.save()
 
     context = {

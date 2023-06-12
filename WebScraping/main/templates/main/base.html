@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Scraping tutorial offers{% endblock %}</title>
+    <title>{% block title %}Znajdź swojego korepetytora - TUTORS.PL{% endblock %}</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
@@ -22,27 +22,27 @@
           alt="our logo"
         />
       </a>
-      <a class="navbar-brand" style="margin-left:40px" href="{% url 'filter-page' %}">Filter Offers</a>
+      <a class="navbar-brand" style="margin-left:40px" href="{% url 'filter-page' %}">TUTORS.PL</a>
       <ul class="navbar-nav">
       {% if not user.is_authenticated %}
         <li class="nav-item">  
-          <a href="{% url 'login' %}" class="btn btn-link px-3 me-2 text-decoration-none"> Login </a>        
+          <a href="{% url 'login' %}" class="btn btn-link px-3 me-2 text-decoration-none"> Zaloguj </a>        
         </li>
         <li class="nav-item">
-          <a  class="btn btn-primary me-3 text-decoration-none" href="{% url 'register' %}"> Sign Up </a>
+          <a  class="btn btn-primary me-3 text-decoration-none" href="{% url 'register' %}"> Załóż konto </a>
         </li>
       {% else %}
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle px-3 me-2" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Manage
+            Zarządzaj
           </a>
           <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-            <li><a class="dropdown-item" href="{% url 'user-add-offer' %}">Add Offer</a></li>
-            <li><a class="dropdown-item" href="{% url 'user-offer-list' %}">Your Offers</a></li>
+            <li><a class="dropdown-item" href="{% url 'user-add-offer' %}">Dodaj ogłoszenie</a></li>
+            <li><a class="dropdown-item" href="{% url 'user-offer-list' %}">Twoje ogłoszenia</a></li>
           </ul>
         </li>
         <li class="nav-item">
-          <a class="btn btn-primary px-3 me-2 text-decoration-none" href="{% url 'logout' %}"> Sign out </a>
+          <a class="btn btn-primary px-3 me-2 text-decoration-none" href="{% url 'logout' %}"> Wyloguj </a>
         </li>
       </ul>
       {% endif %}
