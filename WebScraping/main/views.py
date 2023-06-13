@@ -114,7 +114,7 @@ def add_offer(request):
         # print(f"Valid form: { form.is_valid()}, value: {form.cleaned_data}")
         if form.is_valid():
             ai = user.id
-            a = Announcement(**form.cleaned_data, maxPrice=form.cleaned_data['minPrice'], author_id=ai)
+            a = Announcement(**form.cleaned_data, maxPrice=form.cleaned_data['minPrice'], author_id=ai, from_our_user=True)
             a.save() 
             return redirect('user-offer-list')           
         else:
