@@ -14,6 +14,9 @@ python -m venv .venv
 .\.venv\Scripts\activate.bat
 pip install -r .\requirements.txt
 cd .\WebScraping\
+```
+create .env file with your own SECRET_KEY (in WebScraping folder)
+```console
 py manage.py makemigrations
 py manage.py migrate
 py manage.py crawl
